@@ -1,10 +1,10 @@
 package gui;
 
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
+
 
 import javax.swing.JFrame;
-import javax.swing.border.Border;
+
 
 
 public class MainBoard extends JFrame{

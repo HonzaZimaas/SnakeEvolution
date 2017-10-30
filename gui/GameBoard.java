@@ -48,7 +48,7 @@ public class GameBoard extends JPanel implements Runnable {
 	
 	private void gameInit() {
 		inGame = true; 
-		snake = new Snake(250, 250, 10, Color.GREEN, Color.GRAY); 
+		snake = new Snake(200, 300, 10, Color.GREEN, Color.BLUE); 
 		apple = new Apple(w, Color.RED, 10); 
 		apple.AppleLocation();
 		brick = new Brick(Color.GRAY, 10, w); 

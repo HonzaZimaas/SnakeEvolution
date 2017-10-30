@@ -19,7 +19,9 @@ public class Brick extends GObject {
 	public void madeBrick() {
 		for ( int i = 0; i < dimension; i += 10) {
 			for (int j = 0; j < dimension; j += 10) {
-				if( (j == dimension - getSize() ) || (i == dimension - getSize()) || (j == 20 )|| (i == 0 )) {
+				if ( (j == dimension - getSize()) || (i == dimension - getSize()) || (j == 20 )|| (i == 0 )  || 
+						((j == 200) && (( i > 200) && (i < 350 ))) || 
+						((i == 250) && (( j < 250) && (j > 100 ))) ) {
 					setX(i); 
 					setY(j); 
 					wall.add(new GObject(getX(), getY(), getSize(), getColor()));   
