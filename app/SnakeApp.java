@@ -1,16 +1,11 @@
 package app;
 
-import javax.swing.SwingUtilities;
+import gui.Canvas;
 
-import gui.MainBoard; 
+public class SnakeApp {
 
-public class SnakeApp{
+    public static void main (String[] args){
+        Canvas c = new Canvas(726, 729);    // NEMĚNIT!!!
+    }
 
-	public static void main(String[]args){
-		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				new MainBoard("Snake Game", 550, 550);
-			}
-		});
-	}
 }

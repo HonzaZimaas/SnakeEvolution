@@ -1,30 +1,20 @@
 package model;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.Random;
 
 public class Apple extends GObject {
-	private int dimension;  // kde všude se mi mùže vykreslit jabko - ètvrecové plátno
-	private Random random; 
+    private int dimension;
+    private Random random;
 
-	public Apple(int dimension, Color color, int size ) {
-		super(0, 0, size, color);
-		this.dimension = dimension;
-		random = new Random(); 
-		
-	} 
-	
-	public void AppleLocation() {
-		int pixel; 
-		
-		pixel =  random.nextInt((dimension - getSize())/getSize());  	//mìlo by to hlídat okraje, aby se jablo nenasralo pod okrajovou kravinu 
-		setX(pixel * getSize() + getSize());
-		pixel =  random.nextInt((dimension - getSize())/ getSize()); 
-		setY(pixel * getSize() + getSize());
-	}
-	
-	
-	
-	
+    public Apple(int x,int y, Color color, int size ) {
+        super(x, y, size, color);
+        random = new Random();
+    }
+
+    public void appleLocation() {
+       setX(200);
+       setY(400);
+    }
 
 }
