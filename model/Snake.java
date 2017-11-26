@@ -6,20 +6,42 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
 public class Snake extends GObject{
     private List<GObject> body;
+    private List<Direction> directions;   // seznam smeru hada
+    private List<Direction> directionsNovy;
     private Direction direct;
     private Color colorBody;
+    private boolean isAlive = true;
+
+    private Random rnd;
+    private DNA dna;
 
     public Snake(int x,int y,int size, Color color, Color colorBody) {
         super(x, y, size, color );
+        body = new ArrayList<>();
+        directions = new ArrayList<>();
+        directionsNovy= new ArrayList<>();
+        rnd = new Random();
+        dna = new DNA();
+
         setColorBody(colorBody);
         setDirect(Direction.RIGHT);
-        body = new ArrayList<>();
         fillSnake();
-
     }
+
+    public Snake(int x,int y,int size, Color color, Color colorBody, List<Direction> directions) {
+        super(x, y, size, color );
+        body = new ArrayList<>();
+        this.directions = directions;
+        rnd = new Random();
+        dna = new DNA();
+
+        setColorBody(colorBody);
+        setDirect(Direction.RIGHT);
+        fillSnake();
+    }
+
 
     private void fillSnake() {
         GObject ob1 = new GObject((getX() - getSize()), getY(), getSize(), getColorBody());
@@ -46,12 +68,19 @@ public class Snake extends GObject{
     }
 
     public void move() {
-        moveBody();
-        moveHead();
-        changeDirect();
+        if (isAlive) {
+            Direction d = getDirect();
+            directions.add(d);
+
+            moveBody();
+            changeDirect();
+            moveHead();
+        }
     }
 
-    public void moveBody() {
+
+
+    private void moveBody() {
         int move;
         int moveX = getX();
         int moveY = getY();
@@ -65,10 +94,9 @@ public class Snake extends GObject{
             ob.setY(moveY);
             moveY = move;
         }
-
     }
 
-    public void moveHead() {
+    private void moveHead() {
         switch (getDirect()) {
             case LEFT:
                 setX(getX() - getSize());
@@ -83,14 +111,10 @@ public class Snake extends GObject{
                 setY(getY() + getSize());
                 break;
         }
-
     }
 
-    public void changeDirect() {
-
-        Random rnd = new Random();
+    private void changeDirect() {
         int number = rnd.nextInt(4) ;
-
         switch (number) {
             case 0:
                 if (getDirect() != Direction.DOWN) {
@@ -109,7 +133,6 @@ public class Snake extends GObject{
                     setDirect(Direction.DOWN);
                 }
 
-
                 break;
             case 3:
                 if (getDirect() != Direction.RIGHT) {
@@ -117,6 +140,14 @@ public class Snake extends GObject{
                 break;
                 }
         }
+    }
+
+
+
+
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
     }
 
     public List<GObject> getBody() {
@@ -141,5 +172,13 @@ public class Snake extends GObject{
 
     public void setColorBody(Color colorBody) {
         this.colorBody = colorBody;
+    }
+
+    public List<Direction> getDirections() {
+        return directions;
+    }
+
+    public void setDirections(List<Direction> directions) {
+        this.directions = directions;
     }
 }

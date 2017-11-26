@@ -33,14 +33,10 @@ import java.util.List;
             }
         }
 
-
         public List<GObject> getWall() {
             return wall;
         }
 
-        public void setWall(List<GObject> wall) {
-            this.wall = wall;
-        }
 
         @Override
         public void draw(Graphics2D g) {

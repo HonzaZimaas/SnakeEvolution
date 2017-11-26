@@ -5,22 +5,14 @@ import java.awt.*;
 public class GObject {
     private int x;
     private int y;
-
     private int size;
     private Color color;
 
     public GObject(int x, int y, int size, Color color) {
-        setX(x);
-        setY(y);
-        setSize(size);
-        setColor(color);
-    }
-
-    public GObject() {
-        setX(x);
-        setY(y);
-        setSize(size);
-        setColor(color);
+       this.x = x;
+       this.y = y;
+       this.size = size;
+       this.color = color;
     }
 
     public void draw(Graphics2D g) {
@@ -28,10 +20,6 @@ public class GObject {
         g.fillRect( x, y, size, size);
     }
 
-    public void draw(Graphics g) {
-        g.setColor(color);
-        g.fillRect( x, y, size, size);
-    }
 
 
     public int getX() {

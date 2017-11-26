@@ -1,47 +1,39 @@
 package gui;
 
-import model.Apple;
+import model.Apples;
 import model.Brick;
-import model.Snake;
-
-import utils.Collisions;
+import model.Population;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Canvas extends JFrame implements Runnable{
-
     private JPanel panel;
-    private Apple apple;
-    private Apple peach;
-    private Apple grapes;
+
     private Brick brick;
-    private Snake snake;
+    private Population population;
+    private Apples apples;
 
 
     private int height;
     private int width;
 
-    protected static int TICKS = 500;
+    public static int TICKS = 100;
     private long cycleTime;
     private final int FRAME_DELAY = 100;
+    private int round = 0;
 
     private boolean isRunning;
-
-
 
 
     public Canvas(int width , int height ) {
         this.width = width - 26 ;
         this.height = height - 9 ;
 
-
-
         setSize(width , height );
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Snake Game");
         setResizable(false);
-
         setFocusable(true);
         setIgnoreRepaint(false);
 
@@ -50,7 +42,6 @@ public class Canvas extends JFrame implements Runnable{
         add(panel, BorderLayout.CENTER);
 
         setVisible(true);
-
 
         SwingUtilities.invokeLater(() -> {
             SwingUtilities.invokeLater(() -> {
@@ -67,11 +58,10 @@ public class Canvas extends JFrame implements Runnable{
 
     private void gameInit() {
         isRunning = true;
-        apple = new Apple(50, 20, Color.red,10);
-        peach = new Apple ( 530, 500, Color.green, 10);
-        grapes = new Apple (450, 50, Color.magenta, 10);
+
+        population = new Population();
+        apples = new Apples();
         brick = new Brick(Color.gray, 10, width , height );
-        snake = new Snake(200, 400, 10, Color.green, Color.ORANGE);
 
         updateGraphics();
         start();
@@ -82,31 +72,11 @@ public class Canvas extends JFrame implements Runnable{
         g2.setBackground(Color.black);
         g2.fillRect(10,10,width, height );
 
-        peach.draw(g2);
-        apple.draw(g2);
-        grapes.draw(g2);
         brick.draw(g2);
-        snake.draw(g2);
-
+        apples.draw(g2);
+        population.draw(g2, brick, apples);
     }
 
-
-    public void updateLogic() {
-     if(Collisions.eat(snake, apple)){
-            snake.expandBody();
-        }
-
-        else if(Collisions.defect(snake, brick)) {
-            isRunning = false;
-        }
-
-     /* else if (Collisions.checkCollision(snake)){
-            isRunning = false; }  */
-
-        else {
-            snake.changeDirect();
-            snake.move(); }
-    }
 
     public void start(){
         Thread thread = new Thread(this, "Snake move");
@@ -117,14 +87,17 @@ public class Canvas extends JFrame implements Runnable{
     public void run() {
         while(isRunning) {
             while(TICKS > 0 ) {
-                updateLogic();
                 updateGraphics();
                 synchFrameRate();
                 TICKS --;
             }
+            population.createNewPopulation();
+            TICKS = 100 ;
+            round ++ ;
         }
-
     }
+
+
     private void synchFrameRate() {
         cycleTime += FRAME_DELAY;
         long difference = cycleTime - System.currentTimeMillis();
@@ -137,6 +110,4 @@ public class Canvas extends JFrame implements Runnable{
         }
         cycleTime = System.currentTimeMillis();
     }
-
-
 }
