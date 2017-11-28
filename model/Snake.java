@@ -1,18 +1,20 @@
 package model;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Snake extends GObject{
     private List<GObject> body;
-    private List<Direction> directions;   // seznam smeru hada
-    private List<Direction> directionsNovy;
+    private List<Direction> directions;   // seznam smeru hada v prvni generaci via puvodni gen
     private Direction direct;
     private Color colorBody;
+
+    private int distance;
+
     private boolean isAlive = true;
+    private boolean isBigger = false;
 
     private Random rnd;
     private DNA dna;
@@ -21,21 +23,21 @@ public class Snake extends GObject{
         super(x, y, size, color );
         body = new ArrayList<>();
         directions = new ArrayList<>();
-        directionsNovy= new ArrayList<>();
+
         rnd = new Random();
-        dna = new DNA();
+        this.dna = new DNA(directions);
 
         setColorBody(colorBody);
         setDirect(Direction.RIGHT);
         fillSnake();
     }
 
-    public Snake(int x,int y,int size, Color color, Color colorBody, List<Direction> directions) {
+    public Snake(int x,int y,int size, Color color, Color colorBody, DNA dna) {
         super(x, y, size, color );
         body = new ArrayList<>();
-        this.directions = directions;
+
         rnd = new Random();
-        dna = new DNA();
+        this.dna = dna;
 
         setColorBody(colorBody);
         setDirect(Direction.RIGHT);
@@ -50,6 +52,20 @@ public class Snake extends GObject{
         body.add(ob1);
         body.add(ob2);
         body.add(ob3);
+    }
+
+    public int calculateFitness(Apples apple) {
+        int fitness = 0;
+
+        if (isAlive) {
+            distance = (int) (Math.sqrt(Math.pow( - apple.getAppleX(0) + getX(),2) + Math.pow(-apple.getAppleX(0) + getY(),2)));
+
+            fitness =  apple.getAppleX(0) - distance ;
+            if (distance < 200) fitness = fitness * 2;
+            if (distance < 100) fitness = fitness * 4;
+            if (isBigger) fitness = fitness * 10 ;
+        }
+        return fitness;
     }
 
     @Override
@@ -78,7 +94,13 @@ public class Snake extends GObject{
         }
     }
 
-
+    public void move(int tick) {
+    if (isAlive) {
+        setDirect(dna.getDirections().get(tick) );
+        moveBody();
+        moveHead();
+        }
+    }
 
     private void moveBody() {
         int move;
@@ -113,7 +135,7 @@ public class Snake extends GObject{
         }
     }
 
-    private void changeDirect() {
+    public void changeDirect() {
         int number = rnd.nextInt(4) ;
         switch (number) {
             case 0:
@@ -143,8 +165,13 @@ public class Snake extends GObject{
     }
 
 
+    public DNA getDNA() {
+        return dna;
+    }
 
-
+    public void setBigger(boolean bigger) {
+        isBigger = bigger;
+    }
 
     public void setAlive(boolean alive) {
         isAlive = alive;

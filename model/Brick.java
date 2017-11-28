@@ -20,11 +20,19 @@ import java.util.List;
         }
 
         private void madeBrick() {
-            for ( int i = 0; i < maxY; i += 10) {
-                for (int j = 0; j < maxX; j += 10) {
-                    if ( (j == maxX  - 20 ) || (i == maxY -20 ) || (j == 0 )|| (i == 0  )  ||
-                            ((j == 200) && (( i > 200) && (i < 350 ))) ||
-                            ((i == 250) && (( j < 250) && (j > 100 ))) ) {
+            for ( int i = 0; i < maxX; i += 5) {
+                for (int j = 0; j < maxY; j += 5) {
+                    if ( (j == maxY - 40 ) || (i == maxX - 20 ) || (j == 0 )|| (i == 0  )  ||    // edge
+
+                            ((j == 250) && (( i > 100) && (i < 350 )))   ||        // cross double
+                            ((j == 255) && (( i > 100) && (i < 350 )))   ||
+
+                            ((i == 225) && (( j < 300) && (j > 100 )))   ||
+                            ((i == 220) && (( j < 300) && (j > 100 )))   ||
+
+                            (i == 375 ) && ( j > 550) || (i == 380 ) && ( j > 550)      // edge on x double
+                     )
+                    {
                         setX(i);
                         setY(j);
                         wall.add(new GObject(getX(), getY(), getSize(), getColor()));

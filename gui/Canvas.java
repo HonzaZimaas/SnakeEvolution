@@ -14,21 +14,20 @@ public class Canvas extends JFrame implements Runnable{
     private Population population;
     private Apples apples;
 
-
     private int height;
     private int width;
 
-    public static int TICKS = 100;
+    private static int TICKS = 250;
+    private static final int TOTAL = 250;
     private long cycleTime;
-    private final int FRAME_DELAY = 100;
     private int round = 0;
 
     private boolean isRunning;
 
 
     public Canvas(int width , int height ) {
-        this.width = width - 26 ;
-        this.height = height - 9 ;
+        this.width = width -1 ;
+        this.height = height -4 ;
 
         setSize(width , height );
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -52,7 +51,6 @@ public class Canvas extends JFrame implements Runnable{
                 });
             });
         });
-
     }
 
 
@@ -61,24 +59,24 @@ public class Canvas extends JFrame implements Runnable{
 
         population = new Population();
         apples = new Apples();
-        brick = new Brick(Color.gray, 10, width , height );
+        brick = new Brick(Color.gray, 5, width , height );
 
         updateGraphics();
         start();
     }
 
-    public void updateGraphics() {
+    private void updateGraphics() {
         Graphics2D g2 = (Graphics2D) panel.getGraphics();
         g2.setBackground(Color.black);
-        g2.fillRect(10,10,width, height );
+        g2.fillRect(5,5,width - 25 , height - 45  );
 
         brick.draw(g2);
         apples.draw(g2);
-        population.draw(g2, brick, apples);
+        population.draw(g2, brick, apples,(TOTAL + 1 - TICKS) , round);
     }
 
 
-    public void start(){
+    private void start(){
         Thread thread = new Thread(this, "Snake move");
         thread.start();
     }
@@ -88,17 +86,20 @@ public class Canvas extends JFrame implements Runnable{
         while(isRunning) {
             while(TICKS > 0 ) {
                 updateGraphics();
-                synchFrameRate();
+                frameRate();
                 TICKS --;
             }
-            population.createNewPopulation();
-            TICKS = 100 ;
+            population.createNewPopulation(apples);
+            TICKS = TOTAL ;
             round ++ ;
+            System.out.println("-------Generace:"+ round +"-------");
+
         }
     }
 
 
-    private void synchFrameRate() {
+    private void frameRate() {
+        int FRAME_DELAY = 10;
         cycleTime += FRAME_DELAY;
         long difference = cycleTime - System.currentTimeMillis();
 
