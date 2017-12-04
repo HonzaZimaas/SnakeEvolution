@@ -42,7 +42,6 @@ public class Population {
 
             if (Collisions.eat(snake, apple)) {
                 snake.expandBody();
-                snake.setBigger(true);
             }
 
     }

@@ -17,8 +17,8 @@ public class Canvas extends JFrame implements Runnable{
     private int height;
     private int width;
 
-    private static int TICKS = 250;
-    private static final int TOTAL = 250;
+    private static int TICKS = 400;
+    private static final int TOTAL = 400;
     private long cycleTime;
     private int round = 0;
 
@@ -99,7 +99,7 @@ public class Canvas extends JFrame implements Runnable{
 
 
     private void frameRate() {
-        int FRAME_DELAY = 10;
+        int FRAME_DELAY = 30;
         cycleTime += FRAME_DELAY;
         long difference = cycleTime - System.currentTimeMillis();
 

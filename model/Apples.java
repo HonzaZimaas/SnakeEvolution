@@ -11,13 +11,11 @@ public class Apples {
     public Apples() {
         apples = new ArrayList<>();
 
-        GObject apple = new GObject(550, 450, 25, Color.RED);
-        GObject peach = new GObject( 350, 125,25, Color.GREEN );
-        //GObject grapes = new GObject(450, 50, 10,  Color.magenta );
+        apples.add (new GObject(500, 425, 15, Color.RED));
+        apples.add (new GObject(550, 250, 15,  Color.magenta ));
+        apples.add (new GObject( 350, 125,15, Color.GREEN ));
 
-        apples.add(apple);
-        apples.add(peach);
-        //apples.add(grapes);
+
     }
 
     public List<GObject> getApples() {

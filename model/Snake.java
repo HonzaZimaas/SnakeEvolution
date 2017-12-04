@@ -11,13 +11,12 @@ public class Snake extends GObject{
     private Direction direct;
     private Color colorBody;
 
-    private int distance;
-
     private boolean isAlive = true;
     private boolean isBigger = false;
 
     private Random rnd;
     private DNA dna;
+
 
     public Snake(int x,int y,int size, Color color, Color colorBody) {
         super(x, y, size, color );
@@ -44,27 +43,42 @@ public class Snake extends GObject{
         fillSnake();
     }
 
-
     private void fillSnake() {
-        GObject ob1 = new GObject((getX() - getSize()), getY(), getSize(), getColorBody());
-        GObject ob2 = new GObject((getX() - getSize()), getY(), getSize(), getColorBody());
-        GObject ob3 = new GObject ((getX() - getSize()), getY(), getSize(), getColorBody());
-        body.add(ob1);
-        body.add(ob2);
-        body.add(ob3);
+        body.add(new GObject((getX() - getSize()), getY(), getSize(), getColorBody()));
+        body.add(new GObject((getX() - getSize()), getY(), getSize(), getColorBody()));
+        body.add(new GObject ((getX() - getSize()), getY(), getSize(), getColorBody()));
     }
 
     public int calculateFitness(Apples apple) {
         int fitness = 0;
+        int distance, nextDistance, lastDistance;
+
 
         if (isAlive) {
-            distance = (int) (Math.sqrt(Math.pow( - apple.getAppleX(0) + getX(),2) + Math.pow(-apple.getAppleX(0) + getY(),2)));
+            distance = (int) (Math.sqrt(Math.pow( apple.getAppleX(0) - getX(),2) + Math.pow(apple.getAppleY(0) - getY(),2)));
 
             fitness =  apple.getAppleX(0) - distance ;
             if (distance < 200) fitness = fitness * 2;
-            if (distance < 100) fitness = fitness * 4;
-            if (isBigger) fitness = fitness * 10 ;
+            if (distance < 100) fitness = fitness * 3;
+            if (distance < 10) { fitness = fitness * 5; isBigger = true;}
+
+            if (isBigger)  { fitness = fitness * 10;
+
+                nextDistance = (int) (Math.sqrt(Math.pow(apple.getAppleX(1) - getX(), 2) + Math.pow(apple.getAppleY(1) - getY(), 2)));
+                fitness =  fitness + apple.getAppleY(1) - nextDistance ;
+                if (nextDistance < 200) fitness = fitness * 2;
+                if (nextDistance < 100) fitness = fitness * 3;
+                if (nextDistance < 50) fitness = fitness * 5;
+
+                lastDistance = (int) (Math.sqrt(Math.pow(apple.getAppleX(2) - getX(), 2) + Math.pow(apple.getAppleY(2) - getY(), 2)));
+                fitness =  fitness + apple.getAppleY(2) - lastDistance ;
+                if (lastDistance < 200) fitness = fitness * 2;
+                if (lastDistance < 100) fitness = fitness * 3;
+                if (lastDistance < 50) fitness = fitness * 5;
+            }
         }
+
+
         return fitness;
     }
 
@@ -80,6 +94,7 @@ public class Snake extends GObject{
 
     public void expandBody() {
         body.add(0, new GObject(getX(), getY(), getSize(), getColorBody())) ;
+        setBigger(true);
         moveHead();
     }
 
